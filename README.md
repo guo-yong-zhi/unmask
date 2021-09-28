@@ -1,5 +1,5 @@
 # unmask
-
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/guo-yong-zhi/unmask/HEAD?urlpath=lab%2Ftree%2Funmask.ipynb)
 * 打开unmask.ipynb
 * 修改`text`字符串中的内容或者直接编辑`article.txt`
 * 挖空的词需用数字或下划线`_`开头
