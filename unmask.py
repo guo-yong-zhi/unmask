@@ -15,10 +15,23 @@ def unmask(text, top_k=10):
     predicted_tokens = [tokenizer.convert_ids_to_tokens(i) for i in predicted_indexes]
     return predicted_tokens
 
+nltk.data.path.append("~/nltk_data")
+import requests
+import shutil
+def wget(url, filename):
+    chunk_size = 1024*1024
+    res = requests.get(url, stream=True)
+    with open(filename, "wb") as f:
+        for chunk in res.iter_content(chunk_size=chunk_size):
+            if chunk:
+                f.write(chunk)
+    return filename
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
-    nltk.download('punkt')
+    wget("https://github.com/guo-yong-zhi/unmask/releases/download/punkt/punkt.zip", "~/nltk_data/tokenizers/punkt.zip")
+    shutil.unpack_archive("~/nltk_data/tokenizers/punkt.zip", "~/nltk_data/tokenizers/")
+    # nltk.download('punkt')
 
 def single_mask(s):
     fi = re.finditer(r"[\d_]+([A-Za-z_-]+)", s)
