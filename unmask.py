@@ -1,4 +1,5 @@
 import sys
+import os
 import re
 import nltk
 from transformers import BertTokenizer, BertForMaskedLM
@@ -21,6 +22,7 @@ import shutil
 def wget(url, filename):
     chunk_size = 1024*1024
     res = requests.get(url, stream=True)
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "wb") as f:
         for chunk in res.iter_content(chunk_size=chunk_size):
             if chunk:
