@@ -1,0 +1,8 @@
+name: unmask-environment
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - transformers
+  - pytorch
+  - nltk

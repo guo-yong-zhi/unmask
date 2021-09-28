@@ -1,0 +1,3 @@
+#!/bin/bash
+python unmask.py
+#to download model
