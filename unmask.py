@@ -86,6 +86,8 @@ def gen_mask_sentences(s, single=False):
 def umaskall_sentences(sentences, top_k=50, single_mask=False, io=sys.stdout):
     for i,s in enumerate(sentences):
         for Q, A in gen_mask_sentences(s, single=single_mask):
+            if len(Q) and (Q[-1].isalpha() or Q[-1] == "]"):
+                Q = Q + "."
             print("="*20, i+1, "="*20, file=io)
             print(Q, file=io)
             um = unmask(Q, top_k=top_k)
