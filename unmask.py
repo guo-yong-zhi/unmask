@@ -8,13 +8,37 @@ import torch
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 model = BertForMaskedLM.from_pretrained('bert-base-uncased')
 
-def unmask(text, top_k=10):
+def topk_pos(string, words, i, tag, top_k=5):
+    tag = [t.upper() for t in tag.split("|")]
+    string = string.copy()
+    ret = []
+    for word in words:
+        string[i] = word
+        w,t = nltk.pos_tag(string)[i]
+        if t in tag:
+            ret.append(w)
+            top_k -= 1
+        if top_k == 0:
+            break
+    return ret
+
+def unmask(text, ans, top_k=10):
     inputs = tokenizer(text, return_tensors='pt')
-    predictions = model(**inputs)
+    predictions = model(**inputs)[0][0]
     ismask = inputs['input_ids'][0] == tokenizer.mask_token_id
-    predicted_indexes = torch.topk(predictions[0][0][ismask], k=top_k, dim=1).indices
-    predicted_tokens = [tokenizer.convert_ids_to_tokens(i) for i in predicted_indexes]
-    return predicted_tokens
+    maskinds = torch.arange(len(predictions))[ismask]
+    rts = []
+    assert len(ans) == len(maskinds)
+    for ind,aa in zip(maskinds, ans):
+        if len(aa)>=2 and aa[0]=="[" and aa[-1]=="]":
+            sinds = predictions[ind].argsort(descending=True)
+            words = (tokenizer.convert_ids_to_tokens(i.item()) for i in sinds)
+            string = tokenizer.convert_ids_to_tokens(inputs['input_ids'][0])
+            rt = topk_pos(string[1:-1], words, ind-1, aa[1:-1], top_k)
+        else:
+            rt = tokenizer.convert_ids_to_tokens(predictions[ind].topk(top_k).indices)
+        rts.append(rt)
+    return rts
 
 import requests
 import shutil
@@ -41,15 +65,22 @@ except LookupError:
     url = "https://github.com/guo-yong-zhi/unmask/releases/download/punkt/punkt.zip"
     zipfile = wget(url, os.path.join(datapath, "tokenizers/punkt.zip"))
     shutil.unpack_archive(zipfile, os.path.join(datapath, "tokenizers"))
+try:
+    nltk.data.find('taggers/averaged_perceptron_tagger')
+except LookupError:
+    print("nltk.download('averaged_perceptron_tagger')")
+    nltk.download('averaged_perceptron_tagger')
     
 def single_mask(s):
-    fi = re.finditer(r"[\d_]+([A-Za-z_-]+)", s)
+    fi = re.finditer(r"[\d_]+([A-Za-z_-]+)|(\[[\w\|\$]+\])", s)
     sentences = []
     ans = []
     b = 0
     for ma in fi:
         sentences.append(s[b:ma.start()])
-        ans.append(ma.groups()[0])
+        g = ma.groups()[0]
+        g = ma.groups()[1] if not g else g
+        ans.append(g)
         b = ma.end()
     sentences.append(s[b:])
     for i in range(len(ans)):
@@ -61,13 +92,15 @@ def single_mask(s):
         yield ''.join(r), (ans[i],)
         
 def multi_masks(s):
-    fi = re.finditer(r"[\d_]+([A-Za-z_-]+)", s)
+    fi = re.finditer(r"[\d_]+([A-Za-z_-]+)|(\[[\w\|\$]+\])", s)
     sentences = []
     ans = []
     b = 0
     for ma in fi:
         sentences.append(s[b:ma.start()])
-        ans.append(ma.groups()[0])
+        g = ma.groups()[0]
+        g = ma.groups()[1] if not g else g
+        ans.append(g)
         b = ma.end()
     sentences.append(s[b:])
     r = [sentences[0]]
@@ -90,11 +123,15 @@ def umaskall_sentences(sentences, top_k=50, single_mask=False, io=sys.stdout):
                 Q = Q + "."
             print("="*20, i+1, "="*20, file=io)
             print(Q, file=io)
-            um = unmask(Q, top_k=top_k)
+            um = unmask(Q, A, top_k=top_k)
             assert len(um) == len(A)
             for candi, ans in zip(um, A):
                 aa = ans.lower()
-                print("✔" if aa in candi else "✘", candi.index(aa)+1 if aa in candi else "", ans, file=io)
+                if aa.isalpha():
+                    sign = "✔" if aa in candi else "✘"
+                else:
+                    sign = "☐"
+                print(sign, candi.index(aa)+1 if aa in candi else "", ans, file=io)
                 print("●", ", ".join(candi), file=io)
 
 
