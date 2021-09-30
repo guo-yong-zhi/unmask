@@ -126,6 +126,7 @@ def umaskall_sentences(sentences, top_k=50, single_mask=False, io=sys.stdout):
             um = unmask(Q, A, top_k=top_k)
             assert len(um) == len(A)
             for candi, ans in zip(um, A):
+                ans = ans.strip("_")
                 aa = ans.lower()
                 if aa.isalpha():
                     sign = "✔" if aa in candi else "✘"
