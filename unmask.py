@@ -30,7 +30,7 @@ def unmask(text, ans, top_k=10):
     rts = []
     assert len(ans) == len(maskinds)
     for ind,aa in zip(maskinds, ans):
-        if len(aa)>=2 and aa[0]=="[" and aa[-1]=="]":
+        if len(aa)>=2 and aa[0]=="[" and aa[-1]=="]" and aa.upper() != "[MASK]":
             sinds = predictions[ind].argsort(descending=True)
             words = (tokenizer.convert_ids_to_tokens(i.item()) for i in sinds)
             string = tokenizer.convert_ids_to_tokens(inputs['input_ids'][0])
