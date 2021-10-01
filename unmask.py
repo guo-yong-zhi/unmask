@@ -70,44 +70,46 @@ try:
 except LookupError:
     print("nltk.download('averaged_perceptron_tagger')")
     nltk.download('averaged_perceptron_tagger')
-    
-def single_mask(s):
-    fi = re.finditer(r"[\d_]+([A-Za-z_-]+)|(\[[\w\|\$]+\])", s)
-    sentences = []
+
+def split_mask(s):
+    fi = re.finditer(r"[\d_]+([A-Za-z_-]+)|(\[[\w\|\$]+\])|(_+)", s)
+    frags = []
     ans = []
     b = 0
     for ma in fi:
-        sentences.append(s[b:ma.start()])
+        frags.append(s[b:ma.start()])
         g = ma.groups()[0]
-        g = ma.groups()[1] if not g else g
-        ans.append(g)
+        g = g if g else ma.groups()[1]
+        g = g if g else ""
+        ans.append(g.strip("_"))
         b = ma.end()
-    sentences.append(s[b:])
-    for i in range(len(ans)):
-        r = [sentences[0]]
-        for j in range(len(ans)):
-            a = "[MASK]" if i == j else ans[j]
-            r.append(a)
-            r.append(sentences[j+1])
-        yield ''.join(r), (ans[i],)
+    frags.append(s[b:])
+    return frags, ans
+
+def single_mask(s):
+    frags, ans = split_mask(s)
+    if not ans: return
+    isalpha = [a.isalpha() for a in ans]
+    for i in range(len(ans)+1):
+        if (i < len(ans) and isalpha[i]) or i == len(ans):
+            r = [frags[0]]
+            ra = []
+            for j in range(len(ans)):
+                if i == j or not isalpha[j]:
+                    r.append("[MASK]")
+                    ra.append(ans[j])
+                else:
+                    r.append(ans[j])
+                r.append(frags[j+1])
+            yield ''.join(r), ra
         
 def multi_masks(s):
-    fi = re.finditer(r"[\d_]+([A-Za-z_-]+)|(\[[\w\|\$]+\])", s)
-    sentences = []
-    ans = []
-    b = 0
-    for ma in fi:
-        sentences.append(s[b:ma.start()])
-        g = ma.groups()[0]
-        g = ma.groups()[1] if not g else g
-        ans.append(g)
-        b = ma.end()
-    sentences.append(s[b:])
-    r = [sentences[0]]
+    frags, ans = split_mask(s)
     if ans:
+        r = [frags[0]]
         for j in range(len(ans)):
             r.append("[MASK]")
-            r.append(sentences[j+1])
+            r.append(frags[j+1])
         yield ''.join(r), ans
 
 def gen_mask_sentences(s, single=False):
@@ -119,16 +121,18 @@ def gen_mask_sentences(s, single=False):
 def umaskall_sentences(sentences, top_k=50, single_mask=False, io=sys.stdout):
     for i,s in enumerate(sentences):
         for Q, A in gen_mask_sentences(s, single=single_mask):
-            if len(Q) and (Q[-1].isalpha() or Q[-1] == "]"):
-                Q = Q + "."
+            if len(Q):
+                if Q[-1] == "\\":
+                    Q = Q.strip("\\")
+                elif (Q[-1].isalpha() or Q[-1] == "]"):
+                    Q = Q + "."
             print("="*20, i+1, "="*20, file=io)
             print(Q, file=io)
             um = unmask(Q, A, top_k=top_k)
             assert len(um) == len(A)
             for candi, ans in zip(um, A):
-                ans = ans.strip("_")
                 aa = ans.lower()
-                if aa.isalpha():
+                if ans.isalpha():
                     sign = "✔" if aa in candi else "✘"
                 else:
                     sign = "☐"
