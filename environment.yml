@@ -6,3 +6,4 @@ dependencies:
   - transformers
   - pytorch
   - nltk
+  - appmode
