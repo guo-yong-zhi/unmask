@@ -9,13 +9,15 @@ tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 model = BertForMaskedLM.from_pretrained('bert-base-uncased')
 
 def topk_pos(string, words, i, tag, top_k=5):
+    _UNIVERSAL_TAGS = ("VERB","NOUN","PRON","ADJ","ADV","ADP","CONJ","DET","NUM","PRT","X",".")
     tag = [t.upper() for t in tag.split("|")]
+    has_uni = any([t in _UNIVERSAL_TAGS for t in tag])
     string = string.copy()
     ret = []
     for word in words:
         string[i] = word
         w,t = nltk.pos_tag(string)[i]
-        if t in tag:
+        if t in tag or (has_uni and nltk.tag.map_tag('en-ptb', 'universal', t) in tag):
             ret.append(w)
             top_k -= 1
         if top_k == 0:
@@ -56,7 +58,6 @@ def wget(url, filename):
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
-    print("nltk.download('punkt')")
     nltk.download('punkt')
 try:
     nltk.data.find('tokenizers/punkt')
@@ -68,9 +69,13 @@ except LookupError:
 try:
     nltk.data.find('taggers/averaged_perceptron_tagger')
 except LookupError:
-    print("nltk.download('averaged_perceptron_tagger')")
     nltk.download('averaged_perceptron_tagger')
-
+    
+try:
+    nltk.data.find('taggers/universal_tagset')
+except LookupError:
+    nltk.download('universal_tagset')
+    
 def split_mask(s):
     fi = re.finditer(r"[\d_]+([A-Za-z_-]+)|(\[[\w\|\$]+\])|(_+)", s)
     frags = []
