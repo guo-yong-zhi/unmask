@@ -5,4 +5,5 @@
 * 挖空的词也可以用中括号指定词性，`|`表示逻辑或，如：`it is a [RB] useful __.` 或 `[NN|PRP] is [adj]`
 * 默认自动补全末尾句号，如不希望补全，在末尾加反斜杠\，如：I am _和I am _\的区别
 
-点击[这里](https://mybinder.org/v2/gh/guo-yong-zhi/unmask/main?urlpath=%2Fvoila%2Frender%2FUnmaskApp.ipynb)在线使用
+点击[这里](https://mybinder.org/v2/gh/guo-yong-zhi/unmask/main?urlpath=%2Fvoila%2Frender%2FUnmaskApp.ipynb)在线使用，或者  
+如果是windows平台，可以依次执行`packenv.cmd`中的命令打包后（或者直接下载打包好的[win-pack](https://github.com/guo-yong-zhi/unmask/releases)），点击`StartUp.exe`启动
