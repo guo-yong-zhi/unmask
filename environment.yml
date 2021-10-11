@@ -6,4 +6,5 @@ dependencies:
   - transformers
   - pytorch
   - nltk
+  - jupyter
   - voila
