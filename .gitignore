@@ -1,1 +1,5 @@
 .ipynb_checkpoints
+__pycache__
+unmask-environment*
+transformers_data
+nltk_data
