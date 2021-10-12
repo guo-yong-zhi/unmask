@@ -96,7 +96,7 @@ def single_mask(s):
     if not ans: return
     isalpha = [a.isalpha() for a in ans]
     for i in range(len(ans)+1):
-        if (i < len(ans) and isalpha[i]) or i == len(ans):
+        if (i < len(ans) and isalpha[i]) or (i == len(ans) and not all(isalpha)):
             r = [frags[0]]
             ra = []
             for j in range(len(ans)):
