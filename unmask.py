@@ -77,7 +77,7 @@ except LookupError:
     nltk.download('universal_tagset')
     
 def split_mask(s):
-    fi = re.finditer(r"[\d_]+([A-Za-z_-]+)|(\[[\w\|\$]+\])|(_+)", s)
+    fi = re.finditer(r"[\d_]+([A-Za-z_-]+)|(\[[\w\|\$\.]+\])|(_+)", s)
     frags = []
     ans = []
     b = 0
@@ -90,17 +90,19 @@ def split_mask(s):
         b = ma.end()
     frags.append(s[b:])
     return frags, ans
+def is_word(w):
+    return w.replace("-", "").isalpha()
 
 def single_mask(s):
     frags, ans = split_mask(s)
     if not ans: return
-    isalpha = [a.isalpha() for a in ans]
+    isword = [is_word(a) for a in ans]
     for i in range(len(ans)+1):
-        if (i < len(ans) and isalpha[i]) or (i == len(ans) and not all(isalpha)):
+        if (i < len(ans) and isword[i]) or (i == len(ans) and not all(isword)):
             r = [frags[0]]
             ra = []
             for j in range(len(ans)):
-                if i == j or not isalpha[j]:
+                if i == j or not isword[j]:
                     r.append("[MASK]")
                     ra.append(ans[j])
                 else:
@@ -129,7 +131,7 @@ def umaskall_sentences(sentences, top_k=50, single_mask=False, io=sys.stdout):
             if len(Q):
                 if Q[-1] == "\\":
                     Q = Q.strip("\\")
-                elif (Q[-1].isalpha() or Q[-1] == "]"):
+                elif (is_word(Q[-1]) or Q[-1] == "]"):
                     Q = Q + "."
             print("="*20, i+1, "="*20, file=io)
             print(Q, file=io)
@@ -137,12 +139,12 @@ def umaskall_sentences(sentences, top_k=50, single_mask=False, io=sys.stdout):
             assert len(um) == len(A)
             for candi, ans in zip(um, A):
                 aa = ans.lower()
-                if ans.isalpha():
+                if is_word(ans):
                     sign = "✔" if aa in candi else "✘"
                 else:
-                    sign = "☐"
-                print(sign, candi.index(aa)+1 if aa in candi else "", ans, file=io)
-                print("●", ", ".join(candi), file=io)
+                    sign = "☰"
+                print(sign+(str(candi.index(aa)+1) if aa in candi else ""), ans, file=io)
+                print("◉", ", ".join(candi), file=io)
 
 
 def umaskall(text, split_stences=True, **kargs):
