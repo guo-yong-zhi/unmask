@@ -7,4 +7,4 @@
 * 当输入是完整句子而非短语时效果会更好，整段话或者整篇文章亦可。`split_stences`控制自动拆分成单句或段落多次输入
 
 点击[这里](https://mybinder.org/v2/gh/guo-yong-zhi/unmask/main?urlpath=%2Fvoila%2Frender%2FUnmaskApp.ipynb)在线使用，或者  
-如果是windows平台，可以依次执行`packenv.cmd`中的命令打包后（或者直接下载打包好的[win-pack](https://github.com/guo-yong-zhi/unmask/releases)），点击`StartUp.exe`启动
+如果是windows平台，可以下载打包好的环境[unmask-environment.tar.gz](https://github.com/guo-yong-zhi/unmask/releases/tag/win-pack)到项目根目录，不必解压（或者依次执行`packenv.cmd`中的命令自行打包），然后点击`StartUp.exe`启动
