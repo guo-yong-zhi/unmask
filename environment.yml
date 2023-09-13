@@ -2,9 +2,9 @@ name: unmask-environment
 channels:
   - conda-forge
 dependencies:
-  - python
-  - transformers
-  - pytorch
-  - nltk
-  - jupyter
-  - voila
+  - python=3.8.12
+  - transformers=4.11.2
+  - pytorch=1.6.0
+  - nltk=3.6.4
+  - jupyter=1.0.0
+  - voila=0.2.16
