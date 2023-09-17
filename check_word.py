@@ -24,8 +24,11 @@ def all_variant_in_dict(word, D, lemmatizer=lemmatizer, tags="nvars", delimiter=
         results.append(strip_lower_word)
     for t in tags:
         lem_word = lemmatizer(strip_lower_word, pos = t)
-        if lem_word != strip_word and lem_word != strip_lower_word and lem_word in D:
+        if lem_word != strip_lower_word and lem_word in D:
             results.append(lem_word)
+        cap_word = lem_word.capitalize()
+        if cap_word != strip_word and cap_word in D:
+            results.append(cap_word)
     for i,d in enumerate(delimiter):
         if d in word:
             words = word.split(d)
@@ -49,6 +52,9 @@ def check_in_dict(word, D, lemmatizer=lemmatizer, tags="nvars"):
         lem_word = lemmatizer(lower_word, pos = t)
         if lem_word != lower_word and lem_word in D:
             return True, lem_word
+        cap_word = lem_word.capitalize()
+        if cap_word in D:
+            return True, cap_word
     des = ["-", "'"]
     for d in des:
         if d in word:
