@@ -1,4 +1,4 @@
 #!/bin/bash
-python unmask.py
-python check_word.py
+python src/unmask.py
+python src/check_word.py
 #to download model
