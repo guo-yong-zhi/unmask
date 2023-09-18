@@ -72,8 +72,10 @@ def sort_key(n):
     for t in ["lesson", "topic", "unit", "module", ]:
         n[2] = n[2].replace(t, "")
     n[2] = n[2].replace("  ", " ").strip()
-    n2sp = n[2].split()
     n1sp = n[1].split("-")
+    while len(n1sp) < 2:
+        n1sp.append("999")
+    n2sp = n[2].split()
     while len(n2sp) < 4:
         n2sp.append("S"*7)
     return (od.get(n[1][0] if n[1] else "", 100), [(len(i),i) for i in n1sp], [(len(i),i) for i in n2sp],-ln2, n[3],  n)
