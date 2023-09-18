@@ -8,7 +8,6 @@
 * 默认自动补全末尾句号，如不希望补全，在末尾加反斜杠\，如：`I am _`和`I am _\`的区别
 * 当输入是完整句子而非短语时效果会更好，整段话或者整篇文章亦可。`split_stences`控制自动拆分成单句或段落多次输入
 
-
 # 超纲词检测
 点击[这里](https://mybinder.org/v2/gh/guo-yong-zhi/unmask/main?urlpath=%2Fvoila%2Frender%2Fsrc%2FWords%20Excluded.ipynb)在线使用，离线方法见下文。
 ## 功能

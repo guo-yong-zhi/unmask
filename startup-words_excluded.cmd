@@ -11,6 +11,6 @@ call .\unmask-environment\Scripts\activate.bat
 call .\unmask-environment\Scripts\conda-unpack.exe
 
 set NLTK_DATA=data\nltk_data
-voila "src\Words Excluded.ipynb"
+voila "Words Excluded.ipynb"
 
 pause
