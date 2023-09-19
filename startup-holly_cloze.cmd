@@ -1,17 +1,18 @@
 @echo off
-if not exist unmask-environment (
+if not exist holly-environment (
     echo Installing...
-    mkdir unmask-environment
-    tar -xzf unmask-environment.tar.gz -C unmask-environment
-    if errorlevel 1 echo Installation failed. Please manually unpack the file unmask-environment.tar.gz to unmask-environment folder.
+    mkdir holly-environment
+    .\tar.exe -xzf holly-environment.tar.gz -C holly-environment
+    if errorlevel 1 echo Installation failed. Please manually unpack the file holly-environment.tar.gz to holly-environment folder.
     )
 echo on
 
-call .\unmask-environment\Scripts\activate.bat
-call .\unmask-environment\Scripts\conda-unpack.exe
+call .\holly-environment\Scripts\activate.bat
+call .\holly-environment\Scripts\conda-unpack.exe
 
 set NLTK_DATA=data\nltk_data
 set TRANSFORMERS_CACHE=data\transformers_data
+set PYDEVD_DISABLE_FILE_VALIDATION=1
 voila "Holly Cloze.ipynb"
 
 pause
