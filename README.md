@@ -1,6 +1,6 @@
 两个英语教辅编辑的工具。
 # 完形填空
-点击[这里](https://mybinder.org/v2/gh/guo-yong-zhi/holly-editor/main?urlpath=%2Fvoila%2Frender%2Fsrc%2FHolly%20Cloze.ipynb)在线使用，离线使用方法见下文。
+点击[这里](https://mybinder.org/v2/gh/guo-yong-zhi/unmask/dev?urlpath=%2Fvoila%2Frender%2FHolly%20Cloze.ipynb)在线使用，离线使用方法见下文。
 ## 功能
 * 可以设置`top_k`, `split_stences`, `single_mask`
 * 挖空的词可以用数字或下划线`_`开头，如：`It's a _great tool` 或 `It's 1pretty 2useful`
@@ -9,7 +9,7 @@
 * 当输入是完整句子而非短语时效果会更好，整段话或者整篇文章亦可。`split_stences`控制自动拆分成单句或段落多次输入
 
 # 超纲词检测
-点击[这里](https://mybinder.org/v2/gh/guo-yong-zhi/holly-editor/main?urlpath=%2Fvoila%2Frender%2Fsrc%2FWords%20Excluded.ipynb)在线使用，离线方法见下文。
+点击[这里](https://mybinder.org/v2/gh/guo-yong-zhi/unmask/dev?urlpath=%2Fvoila%2Frender%2FWords%20Excluded.ipynb)在线使用，离线方法见下文。
 ## 功能
 支持检测文章中各年级的超纲词汇。
 # 离线使用
