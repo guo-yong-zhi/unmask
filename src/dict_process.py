@@ -115,6 +115,7 @@ def find_level_index(sorted_names, level_begin, level_end):
 
 def get_filtered_names(sorted_names, level_begin, level_end):
     begin_index, end_index = find_level_index(sorted_names, level_begin, level_end)
+    end_index = None if end_index is None else end_index + 1
     return sorted_names[begin_index:end_index]
 
 def get_filtered_vocabulary(RevDicts, sorted_names, level_begin, level_end):

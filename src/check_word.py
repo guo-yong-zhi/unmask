@@ -70,7 +70,7 @@ def check_in_dict(word, D, lemmatizer=lemmatizer, tags="nvars"):
     return False, word
 
 def normalize_text(t):
-    t = re.sub(r"’", " '", t)
+    t = re.sub(r"’", "'", t)
     t = re.sub(r"[^a-zA-Z'\-\.]", " ", t)
     t = re.sub(r"--+", " ", t)
     t = re.sub(r"n't\b", " not", t)
