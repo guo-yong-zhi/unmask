@@ -90,4 +90,5 @@ def get_words_out_of_dict(text, D, lemmatizer=lemmatizer, min_length=2, tags="nv
         c, rw = check_in_dict(w, D, lemmatizer=lemmatizer, tags=tags)
         if not c:
             words_out.append(rw)
+    words_out = list(dict.fromkeys(words_out))
     return [w for w in words_out if len(w) >= min_length]
