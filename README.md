@@ -14,6 +14,6 @@
 支持检测文章中各年级的超纲词汇。
 # 离线使用
 ## windows平台
-先克隆本项目，然后下载打包好的环境[holly-environment.tar.gz](https://github.com/guo-yong-zhi/holly-editor/releases/tag/win-pack)到项目根目录，不必解压。或者在项目根目录依次执行`packenv.cmd`中的命令可以自行完成环境安装和打包。最后点击`StartUp Holly Cloze.exe`或者`StartUp Word Excluded.exe`启动。
+先克隆本项目，然后下载打包好的环境[unmask-environment.tar.gz](https://github.com/guo-yong-zhi/unmask/releases/tag/win-pack)到项目根目录，不必解压。或者在项目根目录依次执行`packenv.cmd`中的命令可以自行完成环境安装和打包。最后点击`Holly Cloze.exe`或者`Word Excluded.exe`启动。
 ## Linux平台
-`conda env create -f environment.yml`安装环境。`voila "src/Holly Cloze.ipynb"`或`voila "src/Words Excluded.ipynb"`启动应用。暂时没有打包好的环境。
+`conda env create -f environment.yml`安装环境。`voila "Holly Cloze.ipynb"`或`voila "Words Excluded.ipynb"`启动应用。暂时没有打包好的环境。
